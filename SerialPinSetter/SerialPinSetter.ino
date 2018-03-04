@@ -167,7 +167,7 @@ void PrintAboutInfo()
 {
   WriteLine("Arduino serial pin setter");
   WriteLine("Created By Seth Hendrick");
-  WriteLine("https://github.com/xforever1313/arduinotest/tree/master/serialtest");
+  WriteLine("https://github.com/xforever1313/arduinotest/tree/master/SerialPinSetter");
   WriteLine("Released under the BOOST SOFTWARE LICENSE V1.0");
   WriteLine("END-OF-LIST");
 }
