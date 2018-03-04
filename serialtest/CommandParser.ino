@@ -26,6 +26,7 @@ Command ProcessCommand(const char* str, int strLen)
     else
     {
       digitalWrite(index, HIGH);
+      state[index-1] = HIGH;
       return SetSuccess;
     }
   }
@@ -44,8 +45,21 @@ Command ProcessCommand(const char* str, int strLen)
     else
     {
       digitalWrite(index, LOW);
+      state[index-1] = LOW;
       return ClearSuccess;
     }
+  }
+  else if (s.equals("?") || s.equals("help"))
+  {
+    return PrintHelp;
+  }
+  else if (s.equals("state"))
+  {
+    return GetState;
+  }
+  else if(s.equals("about"))
+  {
+    return PrintAbout;
   }
   
   return SyntaxError;
