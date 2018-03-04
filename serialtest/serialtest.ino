@@ -2,6 +2,16 @@ const int BUFFER_SIZE = 100;
 char buffer[BUFFER_SIZE + 1];
 int bufferIndex;
 
+String vers = "0.1.0";
+
+enum Command
+{
+  SyntaxError = -1,
+  Success = 0,
+  Version = 1,
+  Empty = 2
+};
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(4, OUTPUT);
@@ -32,7 +42,9 @@ void loop() {
     if (ch == '\r')
     {
       buffer[bufferIndex] = '\0';
-      processCommand();
+      Command cmd = ProcessCommand(buffer, bufferIndex);
+      HandleCommand(cmd);
+      bufferIndex = 0;
     }
     else
     {
@@ -50,7 +62,7 @@ void loop() {
   //delay(1000);
 }
 
-void processCommand()
+void EchoSuccess()
 {
   for (int i = 0; i < bufferIndex; ++i)
   {
@@ -67,6 +79,32 @@ void processCommand()
   PrintPrompt();
 }
 
+void HandleCommand(Command command)
+{
+  Serial.println("");
+  
+  switch(command)
+  {
+    case Version:
+      Serial.print("VERSION ");
+      WriteLine(vers.c_str());
+      break;
+
+    case SyntaxError:
+      WriteLine("ERROR: SYNTAX ERROR");
+      break;
+
+    case Empty:
+      // No-Op.
+      break;
+
+    default:
+      WriteLine("ERROR: UNKNOWN COMMAND");
+  }
+
+  PrintPrompt();
+}
+
 void BufferFull()
 {
   Serial.println("");
@@ -80,7 +118,7 @@ void PrintPrompt()
   Serial.print("# ");
 }
 
-void WriteLine(char *ch)
+void WriteLine(const char *ch)
 {
   for (size_t i = 0; ch[i] != '\0'; ++i)
   {
@@ -88,7 +126,4 @@ void WriteLine(char *ch)
   }
   Serial.println("");
 }
-
-
-
 
