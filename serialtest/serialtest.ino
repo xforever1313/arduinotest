@@ -5,7 +5,7 @@ const int BUFFER_SIZE = 100;
 char buffer[BUFFER_SIZE + 1];
 int bufferIndex;
 
-String vers = "0.1.0";
+String vers = "1.0.0";
 
 enum Command
 {
@@ -15,8 +15,10 @@ enum Command
   Empty = 2,
   SetSuccess = 3,
   SetInvalidIndex = 4,
-  ClearSuccess = 5,
-  ClearInvalidIndex = 6
+  SetNotANumber = 5,
+  ClearSuccess = 6,
+  ClearInvalidIndex = 7,
+  ClearNotANumber = 8
 };
 
 void setup() {
@@ -24,6 +26,7 @@ void setup() {
   for (int i = MIN_PIN_INDEX; i <= MAX_PIN_INDEX; ++i)
   {
     pinMode(i, OUTPUT);
+    digitalWrite(i, LOW);
   }
 
   Serial.begin(115200);
@@ -105,11 +108,13 @@ void HandleCommand(Command command)
       break;
 
     case SetInvalidIndex:
-      WriteLine("ERROR: Index out of range");
+    case ClearInvalidIndex:
+      WriteLine("ERROR: INDEX OUT OF RANGE");
       break;
 
-    case ClearInvalidIndex:
-      WriteLine("ERROR: Index out of range");
+    case SetNotANumber:
+    case ClearNotANumber:
+      WriteLine("ERROR: NOT A POSTIVE NONZERO INTEGER");
       break;
 
     default:
@@ -140,4 +145,5 @@ void WriteLine(const char *ch)
   }
   Serial.println("");
 }
+
 

@@ -17,7 +17,7 @@ Command ProcessCommand(const char* str, int strLen)
     int index = indexStr.toInt();
     if (index <= 0)
     {
-      return SyntaxError;
+      return SetNotANumber;
     }
     else if ((index < MIN_PIN_INDEX) || (index > MAX_PIN_INDEX))
     {
@@ -35,7 +35,7 @@ Command ProcessCommand(const char* str, int strLen)
     int index = indexStr.toInt();
     if (index <= 0)
     {
-      return SyntaxError;
+      return ClearNotANumber;
     }
     else if ((index < MIN_PIN_INDEX) || (index > MAX_PIN_INDEX))
     {
