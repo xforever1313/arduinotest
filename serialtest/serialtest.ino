@@ -1,3 +1,6 @@
+const int MIN_PIN_INDEX = 1;
+const int MAX_PIN_INDEX = 13;
+
 const int BUFFER_SIZE = 100;
 char buffer[BUFFER_SIZE + 1];
 int bufferIndex;
@@ -9,15 +12,19 @@ enum Command
   SyntaxError = -1,
   Success = 0,
   Version = 1,
-  Empty = 2
+  Empty = 2,
+  SetSuccess = 3,
+  SetInvalidIndex = 4,
+  ClearSuccess = 5,
+  ClearInvalidIndex = 6
 };
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(4, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(2, OUTPUT);
-  digitalWrite(2, HIGH);
+  for (int i = MIN_PIN_INDEX; i <= MAX_PIN_INDEX; ++i)
+  {
+    pinMode(i, OUTPUT);
+  }
 
   Serial.begin(115200);
 
@@ -45,6 +52,7 @@ void loop() {
       Command cmd = ProcessCommand(buffer, bufferIndex);
       HandleCommand(cmd);
       bufferIndex = 0;
+      buffer[0] = '\0';
     }
     else
     {
@@ -64,19 +72,9 @@ void loop() {
 
 void EchoSuccess()
 {
-  for (int i = 0; i < bufferIndex; ++i)
-  {
-    if (buffer[i] >= 'a' && buffer[i] <= 'z')
-    {
-      buffer[i] -= 0x20;
-    }
-  }
-
-  Serial.println("");
-  WriteLine(buffer);
-  bufferIndex = 0;
-  buffer[0] = '\0';
-  PrintPrompt();
+  String str(buffer);
+  str.toUpperCase();
+  WriteLine(str.c_str());
 }
 
 void HandleCommand(Command command)
@@ -85,17 +83,33 @@ void HandleCommand(Command command)
   
   switch(command)
   {
-    case Version:
-      Serial.print("VERSION ");
-      WriteLine(vers.c_str());
-      break;
-
     case SyntaxError:
       WriteLine("ERROR: SYNTAX ERROR");
       break;
 
     case Empty:
       // No-Op.
+      break;
+    
+    case Version:
+      Serial.print("VERSION ");
+      WriteLine(vers.c_str());
+      break;
+
+    case SetSuccess:
+      EchoSuccess();
+      break;
+
+    case ClearSuccess:
+      EchoSuccess();
+      break;
+
+    case SetInvalidIndex:
+      WriteLine("ERROR: Index out of range");
+      break;
+
+    case ClearInvalidIndex:
+      WriteLine("ERROR: Index out of range");
       break;
 
     default:
