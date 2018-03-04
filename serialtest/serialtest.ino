@@ -23,7 +23,8 @@ enum Command
   ClearNotANumber = 8,
   GetState = 9,
   PrintHelp = 10,
-  PrintAbout = 11
+  PrintAbout = 11,
+  RespondToCanary = 12
 };
 
 void setup() {
@@ -71,12 +72,6 @@ void loop() {
       }
     }
   }
-
-  // put your main code here, to run repeatedly:
-  //digitalWrite(4, HIGH);
-  //delay(1000);
-  //digitalWrite(4, LOW);
-  //delay(1000);
 }
 
 void EchoSuccess()
@@ -135,6 +130,10 @@ void HandleCommand(Command command)
       PrintAboutInfo();
       break;
 
+    case RespondToCanary:
+      WriteLine("I'M DOING SCIENCE AND I'M STILL ALIVE!");
+      break;
+
     default:
       WriteLine("ERROR: UNKNOWN COMMAND");
   }
@@ -181,6 +180,7 @@ void PrintHelpInfo()
   WriteLine("state\t-Get what the pins are currently set to");
   WriteLine("set x\t-Set pin x to HIGH, where 1 <= x <= 13");
   WriteLine("clear x\t-Clear pin x to LOW, where 1 <= x <= 13");
+  WriteLine("canary\t-Send this command to see if I am alive without changing state");
   WriteLine("END-OF-LIST");
 }
 

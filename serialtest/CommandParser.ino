@@ -61,6 +61,10 @@ Command ProcessCommand(const char* str, int strLen)
   {
     return PrintAbout;
   }
+  else if (s.equals("canary"))
+  {
+    return RespondToCanary;
+  }
   
   return SyntaxError;
 }
