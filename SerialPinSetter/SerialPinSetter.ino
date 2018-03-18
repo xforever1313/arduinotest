@@ -57,10 +57,26 @@ void loop() {
 
     if (ch != '\n' && ch != '\r')
     {
-      buffer[bufferIndex++] = ch;
-
-      // Echo back to terminal.
-      Serial.write(ch);
+      // PuTTY uses 127 for backspace, other things
+      // use '\b' or ^H.
+      if ((ch == '\b') || (ch == 127))
+      {
+        if (bufferIndex > 0)
+        {
+          --bufferIndex;
+          // \b is a non-destructive backspace.
+          // To clear the character from the terminal,
+          // we need to do a backspace, send a whitespace,
+          // and destroy the whitespace with a backspace.
+          Serial.write("\b \b");
+        }
+      }
+      else
+      {
+        buffer[bufferIndex++] = ch;
+        // Echo back to terminal.
+        Serial.write(ch);
+      }
     }
     
     if (ch == '\r')
