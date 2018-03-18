@@ -13,6 +13,10 @@ Command ProcessCommand(const char* str, int strLen)
   {
     return Empty;
   }
+  else if (s.startsWith("#"))
+  {
+    return Empty;
+  }
   else if (s.equals("vers") || s.equals("version"))
   {
     return Version;
