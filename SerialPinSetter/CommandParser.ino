@@ -24,6 +24,11 @@ Command ProcessCommand(const char* str, int strLen)
   else if (s.startsWith("set"))
   {
     String indexStr = s.substring(3);
+    if (indexStr.equals(" all"))
+    {
+      return SetAllPins;
+    }
+    
     int index = indexStr.toInt();
     if (index <= 0)
     {
@@ -43,6 +48,11 @@ Command ProcessCommand(const char* str, int strLen)
   else if (s.startsWith("clear"))
   {
     String indexStr = s.substring(5);
+    if (indexStr.equals(" all"))
+    {
+      return ClearAllPins;
+    }
+
     int index = indexStr.toInt();
     if (index <= 0)
     {

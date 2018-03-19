@@ -31,7 +31,9 @@ enum Command
   GetState = 9,
   PrintHelp = 10,
   PrintAbout = 11,
-  RespondToCanary = 12
+  RespondToCanary = 12,
+  SetAllPins = 13,
+  ClearAllPins = 14
 };
 
 void setup() {
@@ -157,6 +159,16 @@ void HandleCommand(Command command)
       WriteLine("I'M DOING SCIENCE AND I'M STILL ALIVE!");
       break;
 
+    case SetAllPins:
+      SetAll();
+      EchoSuccess();
+      break;
+
+    case ClearAllPins:
+      ClearAll();
+      EchoSuccess();
+      break;
+
     default:
       WriteLine("ERROR: UNKNOWN COMMAND");
   }
@@ -219,5 +231,23 @@ void PrintState()
     Serial.println(state[i]);
   }
   WriteLine("END-OF-LIST");
+}
+
+void ClearAll()
+{
+  for (size_t i = MIN_PIN_INDEX; i <= MAX_PIN_INDEX; ++i)
+  {
+    digitalWrite(i, LOW);
+    state[i-1] = LOW;
+  }
+}
+
+void SetAll()
+{
+    for (size_t i = MIN_PIN_INDEX; i <= MAX_PIN_INDEX; ++i)
+  {
+    digitalWrite(i, HIGH);
+    state[i-1] = HIGH;
+  }
 }
 
